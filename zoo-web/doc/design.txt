@@ -1,0 +1,62 @@
+job + data
+
+
+1.Import&Export
+create onetime job without calc
+
+2.calc
+create onetime job
+
+3.job
+input dataSource
+calc
+output dataSource
+trigger info
+create job
+
+job dependency show
+
+each job need interface
+run
+kill
+status
+result
+
+status: submit,wait,ing,fail,success
+
+
+each time run call it task
+task info
+
+
+4.dataSource
+id=123123
+use a map =>
+url= hive:default.my_book,  hdfs://namenode/ok.db/default.my_book,  es://myindex/mytype, mysql:10.21.34.125:3306/database/table
+username：
+password：
+
+data:
+meta,table
+
+
+5.dashboard,metric,monitor,admin
+to be continue
+
+chart:
+choose a datasource of map,
+choose chart type,
+choose demesion
+write chart,
+
+dashboard:
+char can be resize and drag
+group of chart
+
+metric:
+special dashboard
+
+admin:
+orginazation
+user
+role

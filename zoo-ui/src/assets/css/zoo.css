@@ -1,0 +1,22 @@
+body {
+  margin: 0;
+}
+
+.en {
+  font-family: -apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif;
+}
+
+.zh-CN {
+  font-family: Georgia,Times New Roman,Times,Songti SC,serif;
+}
+
+a { 
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration:underline;
+}
+
+
+

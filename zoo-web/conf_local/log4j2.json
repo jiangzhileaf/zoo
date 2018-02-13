@@ -1,0 +1,79 @@
+{
+  "configuration": {
+    "monitorInterval": "30",
+    "status": "warn",
+    "appenders": {
+      "Console": {
+        "name": "stdout",
+        "PatternLayout": {
+          "pattern": "%d{yyyyMMdd HH:mm:ss:SSS}[%p] %c[%F:%M:%L] %m%n"
+        }
+      },
+      "RollingFile": {
+        "name": "file",
+        "PatternLayout": {
+          "pattern": "%d{yyyyMMdd HH:mm:ss:SSS}[%p] %c[%F:%M:%L] %m%n"
+        },
+        "fileName": "../logs/log",
+        "filePattern": "../logs/log.%d{yyyyMMdd}.%i",
+        "Policies": {
+          "TimeBasedTriggeringPolicy": {},
+          "SizeBasedTriggeringPolicy": {
+            "size": "100 MB"
+          }
+        },
+        "DefaultRolloverStrategy": {
+          "Delete": {
+            "basePath": "../logs/",
+            "maxDepth": "1",
+            "IfFileName": {
+              "glob": "log.????????.????"
+            },
+            "IfLastModified": {
+              "age": "7d"
+            }
+          }
+        }
+      }
+    },
+    "loggers": {
+      "logger": [
+        {
+          "name": "org.springframework",
+          "level": "error",
+          "additivity": "false",
+          "AppenderRef": {
+            "ref": "stdout"
+          }
+        },
+        {
+          "name": "org.eclipse.jetty",
+          "level": "error",
+          "additivity": "false",
+          "AppenderRef": {
+            "ref": "stdout"
+          }
+        },
+        {
+          "name": "org.zoo",
+          "level": "info",
+          "additivity": "false",
+          "AppenderRef": [
+            {
+              "ref": "stdout"
+            },
+            {
+              "ref": "file"
+            }
+          ]
+        }
+      ],
+      "root": {
+        "level": "info",
+        "AppenderRef": {
+          "ref": "stdout"
+        }
+      }
+    }
+  }
+}
