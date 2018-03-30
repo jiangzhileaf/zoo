@@ -1,22 +1,13 @@
 import axios from 'axios'
+import VueCookies from 'vue-cookies'
 
 let base = ''
 
-export const getUserList = params => { return axios.get(`${base}/user/list`, { params: params }) }
-
-export const getUserListPage = params => { return axios.get(`${base}/user/listpage`, { params: params }) }
-
-export const removeUser = params => { return axios.get(`${base}/user/remove`, { params: params }) }
-
-export const batchRemoveUser = params => { return axios.get(`${base}/user/batchremove`, { params: params }) }
-
-export const editUser = params => { return axios.get(`${base}/user/edit`, { params: params }) }
-
-export const addUser = params => { return axios.get(`${base}/user/add`, { params: params }) }
-
 export const requestLogin = params => { return axios.post(`${base}/login`, params).then(res => res.data) }
 
-export const checkToken = function (params) { return axios.get(`${base}/token`, { params: params }) }
+export const checkToken = token => { return axios.get(`${base}/token`, {'params': {'token': token}}) }
+
+export const getUserInfo = token => { return axios.get(`${base}/user/info`, {'params': {'token': token}}) }
 
 export const jump = (vue) => {
   let nextJumpPath = vue.$store.getters.getJumpPath
@@ -24,21 +15,23 @@ export const jump = (vue) => {
   vue.$store.commit('clearJumpPath')
 }
 
-export const checkLogin = (vue, callback) => {
-  let token = vue.$store.getters.getToken
-  if (token == null) {
-    vue.$router.push('/login')
-  } else if (vue.$store.getters.tokenAlmostExprie) {
-    checkToken({'token': token}).then((res) => {
-      let { code } = res.data
+// check login then init user
+export const initLogin = (store) => {
+  console.log('init store')
+  let token = VueCookies.get('token')
+
+  if (token === null) {
+    store.commit('logout')
+  } else {
+    getUserInfo(token).then(data => {
+      let { code, msg, user } = data.data
       if (code === 200) {
-        callback(vue)
+        console.log(user)
+        store.commit('login', user)
       } else {
-        vue.$store.commit('logout')
-        vue.$router.push('/login')
+        console.log(msg)
+        store.commit('logout')
       }
     })
-  } else {
-    callback(vue)
   }
 }

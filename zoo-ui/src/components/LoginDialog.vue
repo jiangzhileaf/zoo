@@ -1,10 +1,10 @@
 <template>
-  <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-position="left" label-width="0px" class="login-container">
+  <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-position="left" label-width="0px" class="login-container" @keyup.enter.native="handleSubmit">
     <h3 class="title">{{titleText}}</h3>
-    <el-form-item>
+    <el-form-item prop="username">
       <el-input type="text" v-model="ruleForm.username" auto-complete="off" :placeholder="userPlaceholder"></el-input>
     </el-form-item>
-    <el-form-item>
+    <el-form-item prop="password">
       <el-input type="password" v-model="ruleForm.password" auto-complete="off" :placeholder="pwdPlaceholder"></el-input>
     </el-form-item>
     <el-form-item style="width:100%;">
@@ -52,14 +52,12 @@ export default {
         username: [
           {
             required: true,
-            message: '请输入账号',
             trigger: 'blur'
           }
         ],
         password: [
           {
             required: true,
-            message: '请输入密码',
             trigger: 'blur'
           }
         ]

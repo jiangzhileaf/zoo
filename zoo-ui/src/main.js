@@ -1,23 +1,21 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import App from './App'
+import Mock from './mock'
 import router from './router'
-
 import axios from 'axios'
-import VueCookies from 'vue-cookies'
 
+import VueCookies from 'vue-cookies'
 import i18n from './i18n'
 import store from './vuex'
 
-import Mock from './mock'
-
-import { checkLogin, jump } from './api/api'
-
+import App from './App'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'element-ui/lib/theme-chalk/display.css'
 import './assets/css/zoo.css'
+
+import { getUserInfo } from './api/api'
 
 Vue.config.productionTip = false
 Vue.prototype.$http = axios
@@ -27,19 +25,47 @@ Vue.use(VueCookies)
 
 Mock.bootstrap()
 
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  store,
-  i18n,
-  components: { App },
-  template: '<App/>',
-  created: function () {
-    this.$store.commit('saveJumpPath', this.$route.path)
-    this.$store.commit('initToken')
-    this.$store.commit('initLang')
-    this.$i18n.locale = this.$store.state.lang
-    checkLogin(this, jump)
+var initRouter = function () {
+  let routers = router.routerFormat(store.state.user.router)
+  console.log(routers)
+  router.addRoutes(routers)
+}
+
+var initVue = function (isLogin) {
+  if (isLogin) {
+    initRouter()
   }
-})
+
+  /* eslint-disable no-new */
+  new Vue({
+    el: '#app',
+    router,
+    store,
+    i18n,
+    components: { App },
+    template: '<App/>',
+    created: function () {
+      this.$store.commit('initLang', this)
+    }
+  })
+}
+
+// check login then init vuex before init vue
+let token = VueCookies.get('token')
+
+if (token === null) {
+  store.commit('logout')
+  initVue(false)
+} else {
+  getUserInfo(token).then(data => {
+    let { code, msg, user } = data.data
+    if (code === 200) {
+      store.commit('login', user)
+    } else {
+      console.log(msg)
+      store.commit('logout')
+    }
+  }).then(data => {
+    initVue(true)
+  })
+}

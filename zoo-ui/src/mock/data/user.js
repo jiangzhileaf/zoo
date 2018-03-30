@@ -5,13 +5,46 @@ const Users = [
     password: 'admin',
     realname: '张某某',
     role: ['superboy', 'shark'],
-    menu: {
-      'job': ['get', 'add'],
-      'data': ['get', 'add'],
-      'view': ['get', 'add'],
-      'monitor': ['get', 'add'],
-      'admin': ['get']
-    }
+    topMenu: {
+      'job': ['jobCreate', 'jobSearch'],
+      'data': [],
+      'dashboard': [],
+      'monitor': [],
+      'admin': []
+    },
+    router: [
+      {
+        name: 'job',
+        path: '/job',
+        redirect: '/job/search',
+        children: [
+          {
+            name: 'jobCreate',
+            path: '/job/create'
+          },
+          {
+            name: 'jobSearch',
+            path: '/job/search'
+          }
+        ]
+      },
+      {
+        name: 'data',
+        path: '/data'
+      },
+      {
+        name: 'dashboard',
+        path: '/dashboard'
+      },
+      {
+        name: 'monitor',
+        path: '/monitor'
+      },
+      {
+        name: 'admin',
+        path: '/admin'
+      }
+    ]
   },
   {
     id: 2,
@@ -19,10 +52,30 @@ const Users = [
     password: 'user1',
     realname: '谭某某',
     role: ['freshman', 'lion'],
-    menu: {
-      'job': ['get'],
-      'data': ['get']
-    }
+    topMenu: {
+      'job': ['jobSearch'],
+      'data': []
+    },
+    router: [
+      {
+        name: 'job',
+        topMenu: true,
+        path: '/job',
+        redirect: '/job/search',
+        children: [
+          {
+            name: 'jobSearch',
+            topMenu: true,
+            path: '/job/search'
+          }
+        ]
+      },
+      {
+        name: 'data',
+        topMenu: true,
+        path: '/data'
+      }
+    ]
   }
 ]
 
@@ -41,3 +94,9 @@ if (ts !== null) {
 }
 
 export { Users, Tokens }
+
+/* menu object
+  1. name
+  2. path
+
+*/

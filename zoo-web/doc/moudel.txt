@@ -1,0 +1,110 @@
+{
+    "Task":{
+        "id": "String",
+        "Job": "Job",
+        "status": "String",
+        "startTimestamp": "String",
+        "endTimestamp": "String",
+        "input": "Storage",
+        "output": "Data",
+        "calc": "Calc"
+    },
+
+    "cronjob":{
+        "id": "String",
+        "trigger": "Array<Trigger>",
+        "name": "String",
+        "description": "String",
+        "status": "String",
+        "createTimestamp": "Data",
+        "updateTimestamp": "Data",
+        "maxRetry":"Integer",
+        "maxConcurrent":"Integer",
+        "role":"Group",
+        "input": "Storage",
+        "output": "Data",
+        "calc": "Calc"
+    },
+
+    "Group":{
+        "id":"String",
+        "name":"String"
+    },
+
+    "LinearStorage":{
+        "id":"String",
+        "offset":"String",
+        "props":"Map"
+    },
+
+    "KeyValueStorage":{
+        "id":"String",
+        "props":"Map"
+    },
+
+    "TableStorage":{
+        "id":"String",
+        "database":"String",
+        "table":"String",
+        "props":"Map"
+    },
+
+    "Storage":{
+        "id": "String",
+        "type": "String", // mysql, text, hdfs, hive, es, redis, jkafka, hbase, mongodb, phoenix
+        "props": "Map"
+    },
+
+    "Data":{
+        "storage":"Storage",
+        "props": "Map"
+    },
+
+    "Data-Hdfs":{
+        "storage":"Storage",
+        "props": {
+            "url" : "String"
+        }
+    },
+
+    "HiveSqlCalc":{
+        "id": "String",
+        "engine": "CalcEngine",
+        "props": {
+            "sql":"String"
+        }
+    },
+
+    "Calc":{
+        "id": "String",
+        "engine": "CalcEngine",
+        "props": "Map"
+    },
+
+    "CalcEngine":{
+        "id": "String",
+        "type": "String", // hadoop-mr, hive, spark, storm
+    }
+    
+    
+}
+
+
+// all data import into hdfs then it can calc then it can export
+
+// offline calculation and realtime calculation is quite different , so job must be abstract more;
+// job 
+
+// i need to give each calc a 
+
+
+
+
+
+
+
+
+
+
+
+

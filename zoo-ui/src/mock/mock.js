@@ -41,6 +41,27 @@ export default {
       })
     })
 
+    // 根据token返回用户信息
+    mock.onGet('/user/info').reply(config => {
+      let {token} = config.params
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          Tokens.forEach(t => {
+            if (t.token === token && ((new Date()).getTime() < t.create_timestamp + t.keep_alive_mills)) {
+              Users.forEach(u => {
+                if (t.uid === u.id) {
+                  let user = u
+                  user.token = t.token
+                  resolve([200, {code: 200, user: user}])
+                }
+              })
+            }
+          })
+          resolve([200, {code: 500, msg: 'token is invalid!'}])
+        }, 200)
+      })
+    })
+
     // 登录
     mock.onPost('/login').reply(config => {
       let {username, password} = JSON.parse(config.data)
@@ -51,7 +72,7 @@ export default {
             if (u.username === username && u.password === password) {
               user = u
               user.token = Mock.mock('@guid')
-              Tokens.push({token: user.token, keep_alive_mills: 691200000, create_timestamp: (new Date()).getTime()})
+              Tokens.push({uid: user.id, token: user.token, keep_alive_mills: 691200000, create_timestamp: (new Date()).getTime()})
               localStorage.setItem('tokens', JSON.stringify(Tokens))
               return true
             }
@@ -62,7 +83,7 @@ export default {
           } else {
             resolve([200, { code: 500, msg: '账号或密码错误' }])
           }
-        }, 3000)
+        }, 1000)
       })
     })
 
