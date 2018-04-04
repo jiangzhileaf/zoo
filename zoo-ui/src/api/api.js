@@ -17,7 +17,6 @@ export const jump = (vue) => {
 
 // check login then init user
 export const initLogin = (store) => {
-  console.log('init store')
   let token = VueCookies.get('token')
 
   if (token === null) {
@@ -35,3 +34,5 @@ export const initLogin = (store) => {
     })
   }
 }
+
+export const searchJob = params => { return axios.post(`${base}/job/_search`, params) }

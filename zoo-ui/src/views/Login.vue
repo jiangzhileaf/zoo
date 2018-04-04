@@ -24,6 +24,7 @@ export default {
       let { msg, code, user } = data
       if (code === 200) {
         this.$store.commit('login',user)
+        this.$router.initRouter()
         jump(this)
       } else {
         this.$message({

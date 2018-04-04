@@ -5,6 +5,7 @@
         <navbar></navbar>
       </header>
       <div class="main">
+        <breadcrumb></breadcrumb>
         <router-view></router-view>
       </div>
       <hr>
@@ -24,10 +25,12 @@
 
 <script>
 import Navbar from '@/views/Navbar.vue'
+import Breadcrumb from '@/views/Breadcrumb.vue'
 export default {
   name: 'App',
   components:{
-    'navbar': Navbar
+    'navbar': Navbar,
+    'breadcrumb': Breadcrumb
   },
   computed: {
     lang() {

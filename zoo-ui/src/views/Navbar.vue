@@ -7,24 +7,12 @@
         </router-link>
       </div>
       <div class="main-menu" v-show="isLogin">
-
-     <!--  <el-menu mode="horizontal" :router="true" :default-active='activeTab'>
-        <el-submenu v-for="(item,index) in $router.options.routes" v-if="!item.hidden" :index="index+''">
-            <template slot="title"><i class="el-icon-setting"></i>{{item.name}}</template>
-            <el-menu-item v-for="child in item.children" :index="child.path">{{child.name}}</el-menu-item>
-        </el-submenu>
-      </el-menu>
- -->
-        <el-menu mode="horizontal" :router="true" :default-active='activeTab'>
-          <el-submenu>
-              <template slot="title">我的工作台</template>
-              <el-menu-item >1</el-menu-item>
+        <el-menu mode="horizontal" :unique-opened="true" :router="true" :default-active='activeTab'>
+          <el-submenu v-for="(children, name) in userMenu" v-if="children.length > 0" :key=name :index="findPath(name)">
+              <template slot="title">{{$t('zoo.'+name)}}</template>
+              <el-menu-item v-for="child in children" :key=child :index="findPath(child)">{{$t('zoo.'+child)}}</el-menu-item>
           </el-submenu>
-          <el-submenu v-for="(children, name) in userMenu" v-if="children.length > 0" :key=name :index=name>
-             <template slot="title">{{$t('zoo.'+name)}}</template>
-             <el-menu-item v-for="child in children" :key=child :index="child">{{$t('zoo.'+child)}}</el-menu-item>
-          </el-submenu>
-          <el-menu-item v-for="(children, name) in userMenu" v-if="children.length === 0" :key=name :index=name>{{$t('zoo.'+name)}}</el-menu-item>
+          <el-menu-item v-for="(children, name) in userMenu" v-if="children.length === 0" :key=name :index="findPath(name)">{{$t('zoo.'+name)}}</el-menu-item>
         </el-menu>
       </div>
       <div class="user-menu" v-show="isLogin">
@@ -46,12 +34,24 @@
         </el-dropdown>
       </div>
       <div class="collapse-main-menu" v-show="isLogin">
-        <el-dropdown>
-          <span>
-            <i style="font-size:20px" class="el-icon-menu"></i>
-          </span>
+        <el-dropdown :hide-on-click="false" placement="bottom-start">
+          <i style="font-size:20px" class="el-icon-menu"></i>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-for="(value, key) in userMenu" :key=key :index=key @click.native="jump(key)">{{$t('zoo.'+key)}}</el-dropdown-item>
+            <el-dropdown-item style="width:200px">
+              <el-menu :unique-opened="true" :router="true" :default-active='activeTab'>
+                <el-submenu v-for="(children, name) in userMenu" v-if="children.length > 0" :key=name :index="findPath(name)">
+                    <template slot="title">
+                      {{$t('zoo.'+name)}}
+                    </template>
+                    <el-menu-item v-for="child in children" :key=child :index="findPath(child)">
+                      {{$t('zoo.'+child)}}
+                    </el-menu-item>
+                </el-submenu>
+                <el-menu-item v-for="(children, name) in userMenu" v-if="children.length === 0" :key=name :index="findPath(name)">
+                  {{$t('zoo.'+name)}}
+                </el-menu-item>
+              </el-menu>
+            </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -80,6 +80,9 @@ export default {
     },
     jump: function(menu){
       this.$router.push('/'+menu)
+    },
+    findPath: function(name){
+      return this.$router.findPathByName(name)
     }
   },
   computed: {
@@ -93,8 +96,7 @@ export default {
       return this.$store.getters.isLogin
     },
     activeTab(){
-      var array = this.$route.path.split('/')
-      return array[0]
+      return this.$route.path
     }
   }
 }
@@ -111,10 +113,23 @@ export default {
     max-width: 1140px;
     margin: 0 auto;
   }
+  
+  .nav-top-border {
+    border-top: 3px solid #409EFF;
+  }
 
   .nav-bottom-border {
-    border-bottom: 1px solid transparent;
-    border-color: #f0f0f0;
+   /*  border-bottom: 1px solid transparent;
+    border-bottom-color: #f0f0f0; */
+    box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.1), 0 1px rgba(0,0,0,0.1);
+  }
+
+  .el-menu {
+    border-right: 0px;
+  }
+
+  .el-dropdown-menu__item:not(.is-disabled):hover {
+    background-color: #fff
   }
 
   .el-menu--horizontal {
@@ -131,7 +146,7 @@ export default {
     border-bottom: 0px;
   }
 
-  .el-menu--horizontal>.el-menu-item.is-active,.el-menu--horizontal>.el-submenu.is-active {
+  .el-menu--horizontal>.el-menu-item.is-active,.el-menu--horizontal>.el-submenu.is-active .el-submenu__title  {
     color: #409EFF;
     font-weight: bold;
     border-bottom: 0px;

@@ -5,30 +5,6 @@ import Login from '@/views/Login.vue'
 import Home from '@/views/Home.vue'
 import page404 from '@/views/404.vue'
 
-// // import Job from '@/views/Job.vue'
-// import JobSearch from '@/views/JobSearch.vue'
-// import JobCreate from '@/views/JobCreate.vue'
-// import JobQuick from '@/views/JobQuick.vue'
-// import Data from '@/views/Data.vue'
-// import Dashboard from '@/views/Dashboard.vue'
-// import Monitor from '@/views/Monitor.vue'
-// import Admin from '@/views/Admin.vue'
-
-// const Job = () => import(/* webpackChunkName: "group-job" */ '@/views/Job.vue')
-
-// const componentName = {
-//   home: 'Home',
-//   login: 'Login',
-//   page404: '404',
-//   jobSearch: 'JobSearch',
-//   jobCreate: 'JobCreate',
-//   jobQuick: 'JobQuick',
-//   data: 'Data',
-//   dashboard: 'Dashboard',
-//   monitor: 'Monitor',
-//   admin: 'Admin'
-// }
-
 Vue.use(Router)
 
 const router = new Router({
@@ -83,6 +59,33 @@ router.routerFormat = function rFormat (routers) {
     fmRouters.push(fmRouter)
   })
   return fmRouters
+}
+
+let cache = {}
+
+router.cacheRoutes = function (routes) {
+  routes.forEach(route => {
+    cache[route.name] = route
+    if (route.children !== undefined) {
+      route.children.forEach(child => {
+        cache[child.name] = child
+      })
+    }
+  })
+}
+
+router.findPathByName = function (name) {
+  if (cache[name] !== undefined) {
+    return cache[name].path
+  } else {
+    console.log('find path by name[' + name + '] error !')
+  }
+}
+
+router.initRouter = function () {
+  let routers = router.routerFormat(store.state.user.router)
+  router.addRoutes(routers)
+  router.cacheRoutes(routers)
 }
 
 router.beforeEach((to, from, next) => {

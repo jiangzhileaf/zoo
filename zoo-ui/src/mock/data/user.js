@@ -16,17 +16,15 @@ const Users = [
       {
         name: 'job',
         path: '/job',
-        redirect: '/job/search',
-        children: [
-          {
-            name: 'jobCreate',
-            path: '/job/create'
-          },
-          {
-            name: 'jobSearch',
-            path: '/job/search'
-          }
-        ]
+        redirect: '/job/search'
+      },
+      {
+        name: 'jobCreate',
+        path: '/job/create'
+      },
+      {
+        name: 'jobSearch',
+        path: '/job/search'
       },
       {
         name: 'data',

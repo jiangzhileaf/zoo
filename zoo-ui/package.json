@@ -16,7 +16,7 @@
   "dependencies": {
     "axios": "^0.17.1",
     "axios-mock-adapter": "^1.12.0",
-    "element-ui": "^2.0.11",
+    "element-ui": "^2.3.2",
     "eslint-plugin-html": "^4.0.2",
     "mockjs": "^1.0.1-beta3",
     "node-sass": "^4.7.2",

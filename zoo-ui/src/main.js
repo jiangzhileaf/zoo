@@ -25,15 +25,9 @@ Vue.use(VueCookies)
 
 Mock.bootstrap()
 
-var initRouter = function () {
-  let routers = router.routerFormat(store.state.user.router)
-  console.log(routers)
-  router.addRoutes(routers)
-}
-
 var initVue = function (isLogin) {
   if (isLogin) {
-    initRouter()
+    router.initRouter()
   }
 
   /* eslint-disable no-new */
